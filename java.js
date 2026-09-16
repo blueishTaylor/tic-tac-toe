@@ -1,14 +1,7 @@
 const gameBoard = (() => {
     let tablero = ["", "", "", "", "", "", "", "", ""];
 
-
-    return {
-
-    }
-}
-)
-
-function marcarCasilla(index, marker){
+    function marcarCasilla(index, marker){
     if(tablero[index] !== ""){
         return false;
     }
@@ -24,8 +17,8 @@ function revisaGanador(){
     ];
     for(let combo of combinacionesGanadoras){
         const [a,b,c] = combo;
-        if(board[a] !== "" && board[a] === board[b] && board[a] === board[c]){
-            return board[a]
+        if(tablero[a] !== "" && tablero[a] === tablero[b] && tablero[a] === tablero[c]){
+            return tablero[a]
         }
     }
     return null;
@@ -34,3 +27,34 @@ function revisaGanador(){
 function empate(){
     return tablero.every(cell => cell !=="");
 }
+
+    return {
+        marcarCasilla, 
+        revisaGanador, 
+        empate,
+        getTablero: ()=> [...tablero]
+
+    };
+})();
+
+
+function crearPlayer(nombre, marca){
+return{
+    nombre,
+    marca
+}
+};
+
+const controlMaestro = (()=> {
+    const player1 = crearPlayer("Ana", "X");
+    const player2 = crearPlayer("Gustavo", "O");
+
+    let currentPlayer = player1;
+
+    function playRound(index){
+        gameBoard.marcarCasilla(index, currentPlayer.marca);
+    }
+    return {
+        playRound;
+    }
+})
