@@ -55,6 +55,6 @@ const controlMaestro = (()=> {
         gameBoard.marcarCasilla(index, currentPlayer.marca);
     }
     return {
-        playRound;
+        playRound
     }
 })
