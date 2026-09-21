@@ -8,7 +8,6 @@ const gameBoard = (() => {
     tablero[index] = marker;
     return true;
 }
-
 function revisaGanador(){
     const combinacionesGanadoras = [
         [0,1,2], [3,4,5], [6,7,8],
@@ -50,11 +49,79 @@ const controlMaestro = (()=> {
     const player2 = crearPlayer("Gustavo", "O");
 
     let currentPlayer = player1;
+    let gameOver = false;
+
 
     function playRound(index){
-        gameBoard.marcarCasilla(index, currentPlayer.marca);
+        
+        if(gameOver){
+            console.log("El juego ya termino. Reinicia el juego");
+            return;
+        }
+
+        const marcoValido = gameBoard.marcarCasilla(index, currentPlayer.marca);
+        if(!marcoValido){
+            console.log("Esta casilla ya esta ocupada!! intenta otra.");
+            return;
+        }
+
+        const ganador = gameBoard.revisaGanador();
+
+        if(ganador){
+            console.log(`${currentPlayer.nombre} gano la partida!!🎉`);
+            gameOver = true;
+            return;
+        }
+
+        const hayEmpate = gameBoard.empate();
+
+        if(hayEmpate){
+            console.log("Empate! Nadie gana esta vez.🤝");
+            gameOver= true;
+            return;
+        }
+
+       if(currentPlayer === player1){
+        currentPlayer = player2;
+       } else{
+        currentPlayer = player1;
+       }
+       console.log(`Turno de ${currentPlayer.nombre} (${currentPlayer.marca})`);
     }
     return {
         playRound
+    };
+})();
+
+
+const displayController = (()=> {
+
+
+    const container = document.getElementById("gameboard");
+    
+    function render(){
+        container.innerHTML = "";
+
+        const tableroActual = gameBoard.getTablero();
+
+        tableroActual.forEach((valor,index) => {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.textContent = valor;
+            cell.dataset.index = index;
+
+            cell.addEventListener("click", ()=> {
+                controlMaestro.playRound(index);
+                render();
+        });
+
+            container.appendChild(cell);
+        });
     }
-})
+    return {
+        render
+    };
+})();
+
+
+displayController.render();
