@@ -61,35 +61,30 @@ const controlMaestro = (()=> {
         player2 = crearPlayer(nombre2, "O");
         currentPlayer = player1;
         gameOver = false;
+        gameBoard.resetBoard();
     }
 
     function playRound(index){
         
         if(gameOver){
-            console.log("El juego ya termino. Reinicia el juego");
-            return;
+            return {status: "gameOver"};
         }
 
         const marcoValido = gameBoard.marcarCasilla(index, currentPlayer.marca);
         if(!marcoValido){
-            console.log("Esta casilla ya esta ocupada!! intenta otra.");
-            return;
+            return {status: "invalido"};
         }
 
         const ganador = gameBoard.revisaGanador();
-
         if(ganador){
-            console.log(`${currentPlayer.nombre} gano la partida!!🎉`);
             gameOver = true;
-            return;
+            return { status: "ganador", nombre: currentPlayer.nombre};
         }
 
         const hayEmpate = gameBoard.empate();
-
         if(hayEmpate){
-            console.log("Empate! Nadie gana esta vez.🤝");
             gameOver= true;
-            return;
+            return{ status: "empate"};
         }
 
        if(currentPlayer === player1){
@@ -97,7 +92,8 @@ const controlMaestro = (()=> {
        } else{
         currentPlayer = player1;
        }
-       console.log(`Turno de ${currentPlayer.nombre} (${currentPlayer.marca})`);
+       
+       return{ status: "turno", nombre: currentPlayer.nombre, marca: currentPlayer.marca };
     }
     return {
         startGame,
@@ -107,9 +103,14 @@ const controlMaestro = (()=> {
 
 
 const displayController = (()=> {
-
-
     const container = document.getElementById("gameboard");
+    const setupScreen = document.getElementById("setup-screen");
+    const gameContainer = document.getElementById("game-container");
+    const resultMessage = document.getElementById("result-message");
+    const startBtn = document.getElementById("start-btn");
+    const restartBtn = document.getElementById("restart-btn");
+    const input1 = document.getElementById("player1-name");
+    const input2 = document.getElementById("player2-name");
     
     function render(){
         container.innerHTML = "";
@@ -130,6 +131,28 @@ const displayController = (()=> {
             container.appendChild(cell);
         });
     }
+
+    startBtn.addEventListener("click", ()=> {
+        const nombre1 = input1.value || "Jugador 1";
+        const nombre2 = input2.value || "Jugador 2";
+
+        controlMaestro.startGame(nombre1, nombre2);
+
+        setupScreen.style.display = "none";
+        gameContainer.style.display = "block";
+        resultMessage.textContent = "";
+
+        render();
+    });
+
+    restartBtn.addEventListener("click", ()=> {
+        setupScreen.style.display = "block";
+        gameContainer.style.display = "none";
+        input1.value = "";
+        input2.value = "";
+    });
+
+
     return {
         render
     };
