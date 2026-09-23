@@ -27,10 +27,15 @@ function empate(){
     return tablero.every(cell => cell !=="");
 }
 
+function resetBoard(){
+    tablero = ["", "", "", "", "", "", "", "", ""];
+}
+
     return {
         marcarCasilla, 
         revisaGanador, 
         empate,
+        resetBoard,
         getTablero: ()=> [...tablero]
 
     };
@@ -45,12 +50,18 @@ return{
 };
 
 const controlMaestro = (()=> {
-    const player1 = crearPlayer("Ana", "X");
-    const player2 = crearPlayer("Gustavo", "O");
-
+    let player1;
+    let player2;
     let currentPlayer = player1;
     let gameOver = false;
 
+
+    function startGame(nombre1, nombre2){
+        player1 = crearPlayer(nombre1, "X");
+        player2 = crearPlayer(nombre2, "O");
+        currentPlayer = player1;
+        gameOver = false;
+    }
 
     function playRound(index){
         
@@ -89,6 +100,7 @@ const controlMaestro = (()=> {
        console.log(`Turno de ${currentPlayer.nombre} (${currentPlayer.marca})`);
     }
     return {
+        startGame,
         playRound
     };
 })();

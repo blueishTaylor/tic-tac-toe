@@ -7,8 +7,16 @@
     <title>Tic Tac Toe</title>
 </head>
 <body>
-    <div id="game-container">
+    <div id="setup-screen">
+        <input type="text" id="player1-name" placeholder="Nombre Jugador 1">
+        <input type="text" id="player2-name" placeholder="Nombre Jugador 2">
+        <button id="start-btn">Iniciar Juego</button>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <div id="result-message"></div>
         <div id="gameboard"></div>
+        <button id="restart-btn">Reiniciar</button>
     </div>
     <script src="java.js"></script>
 </body>
