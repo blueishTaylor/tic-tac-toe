@@ -125,6 +125,15 @@ const displayController = (()=> {
 
             cell.addEventListener("click", ()=> {
                 controlMaestro.playRound(index);
+
+                if(resultado.status === "ganador"){
+                    resultMessage.textContent = `${resultado.nombre} gano la partida! 🎉`;
+                } else if(resultado.status === "empate"){
+                    resultMessage.textContent = "Empate! Nadie gano esta vez. 🤝";
+                } else if(resultado.status === "turno"){
+                    resultMessage.textContent = `Turno de ${resultado.nombre} (${resultado.marca})`;
+                }
+
                 render();
         });
 
