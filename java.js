@@ -124,7 +124,7 @@ const displayController = (()=> {
             cell.dataset.index = index;
 
             cell.addEventListener("click", ()=> {
-                controlMaestro.playRound(index);
+                const resultado = controlMaestro.playRound(index);
 
                 if(resultado.status === "ganador"){
                     resultMessage.textContent = `${resultado.nombre} gano la partida! 🎉`;
@@ -166,6 +166,3 @@ const displayController = (()=> {
         render
     };
 })();
-
-
-displayController.render();
